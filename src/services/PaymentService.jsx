@@ -1,5 +1,5 @@
 import { createContext, useContext, useMemo } from "react";
-import { AuthContext, urlBase } from "./SessionService";
+import { SessionService, urlBase } from "./SessionService";
 
 export const PaymentServiceContext = createContext({
   isInitialized: false,
@@ -45,7 +45,7 @@ const getIp = async () => {
 };
 
 export const PaymentServiceProvider = ({ children }) => {
-  const context = useContext(AuthContext);
+  const context = useContext(SessionService);
   const value = useMemo(() => {
     if (context.status !== "auth") {
       return { isInitialized: false };

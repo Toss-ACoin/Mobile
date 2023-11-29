@@ -52,7 +52,7 @@ const CollectionPage = () => {
           <Text>{data.description}</Text>
         </View>
       </View>
-      <View style={{ borderColor: 'dark.200', borderRadius: 'md', borderWidth: 1, justifyContent: 'center', overflow: 'hidden', padding: 6 }}>
+      <View style={{ borderColor: '#767777', borderRadius: 'md', borderWidth: 1, justifyContent: 'center', overflow: 'hidden', padding: 6 }}>
         <Bubble data={data.transactions} />
       </View>
     </ScrollView>

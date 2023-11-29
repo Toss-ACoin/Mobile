@@ -1,56 +1,63 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import React, { Suspense } from 'react';
+import React from 'react';
 import { paths } from '../utils/paths';
-
-import AboutUs from './AboutUs/AboutUs';
+import CollectionPage from './CollectionPage/CollectionPage';
 import Collections from './Collections/Collections';
-import CollectionsList from './CollectionsList/CollectionsList';
-import ContentWrapper from './ContentWrapper/ContentWrapper';
 import CreateCollection from './CreateCollection/CreateCollection';
-import LandingPage from './LandingPage/LandingPage';
-import Payments from './Payments/Payments';
 import SignIn from './SignIn/SignIn';
 import SignUpPage from './SignUpPage/SignUpPage';
 import UserCollections from './UserCollections/UserCollections';
 import UserPanel from './UserPanel/UserPanel';
-import UsersList from './UsersList/UsersList';
 
-const Stack = createNativeStackNavigator();
-const Tab = createBottomTabNavigator();
 
-const MainNavigator = () => {
+const CollectionsListStack = createNativeStackNavigator()
+
+function CollectionsListScreen() {
   return (
-    <Tab.Navigator>
-      <Tab.Screen name="Home" component={ContentWrapper} />
-      <Tab.Screen name="Collections" component={Collections} />
-      <Tab.Screen name="Profile" component={UserPanel} />
-    </Tab.Navigator>
+    <CollectionsListStack.Navigator screenOptions={{ headerShown: false }}>
+      <CollectionsListStack.Screen name={paths.collections} component={Collections} />
+      <CollectionsListStack.Screen name={paths.create} component={CreateCollection} />
+      <CollectionsListStack.Screen name={'collectionPage'} component={CollectionPage} />
+    </CollectionsListStack.Navigator>
   );
-};
+}
+
+const CreateCollectionStack = createNativeStackNavigator()
+
+function CreateCollectionScreen() {
+  return (
+    <CreateCollectionStack.Navigator screenOptions={{ headerShown: false }}>
+      <CreateCollectionStack.Screen name={paths.create} component={CreateCollection} />
+      <CreateCollectionStack.Screen name={paths.signIn} component={SignIn} />
+      <CreateCollectionStack.Screen name={paths.signUp} component={SignUpPage} />
+    </CreateCollectionStack.Navigator>
+  );
+}
+
+const ProfileStack = createNativeStackNavigator()
+
+function ProfileScreen() {
+  return (
+    <ProfileStack.Navigator screenOptions={{ headerShown: false }}>
+      <ProfileStack.Screen name={paths.profile} component={UserPanel} />
+      <ProfileStack.Screen name={paths.myCollections} component={UserCollections} />
+      <ProfileStack.Screen name={paths.signIn} component={SignIn} />
+    </ProfileStack.Navigator>
+  );
+}
+
+const Tab = createBottomTabNavigator();
 
 const Router = () => {
   return (
     <NavigationContainer>
-      <Suspense fallback={null}>
-        <Stack.Navigator initialRouteName={paths.signIn}>
-          <Stack.Screen name={paths.signIn} component={SignIn} />
-          <Stack.Screen name={paths.signUp} component={SignUpPage} />
-          {/* <Stack.Screen name={paths.contentWrapper} component={MainNavigator} /> */}
-          <Stack.Screen name={paths.landingPage} component={LandingPage} />
-          {/* <Stack.Screen name={paths.collection} component={CollectionPage} /> */}
-          <Stack.Screen name={paths.about} component={AboutUs} />
-          <Stack.Screen name={paths.payment} component={Payments} />
-          {/* <Stack.Screen name={paths.protected} component={Protected} /> */}
-          {/* <Stack.Screen name={paths.adminContentWrapper} component={AdminContentWrapper} /> */}
-          <Stack.Screen name={paths.usersList} component={UsersList} />
-          <Stack.Screen name={paths.collectionsList} component={CollectionsList} />
-          <Stack.Screen name={paths.profile} component={UserPanel} />
-          <Stack.Screen name={paths.myCollections} component={UserCollections} />
-          <Stack.Screen name={paths.create} component={CreateCollection} />
-        </Stack.Navigator>
-      </Suspense>
+      <Tab.Navigator screenOptions={{ headerShown: false }}>
+        <Tab.Screen name={paths.collections} component={CollectionsListScreen} />
+        <Tab.Screen name={paths.create} component={CreateCollectionScreen} />
+        <Tab.Screen name={paths.profile} component={ProfileScreen} />
+      </Tab.Navigator>
     </NavigationContainer>
   );
 };

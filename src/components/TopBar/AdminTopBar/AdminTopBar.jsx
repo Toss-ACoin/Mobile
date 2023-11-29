@@ -12,7 +12,7 @@ const Link = ({ to, children }) => (
 const styles = {
   linkText: {
     hover: {
-      color: 'red.200',
+      color: '#FF6B80',
     },
     transitionDuration: '0.2s',
   },

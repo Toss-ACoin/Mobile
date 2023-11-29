@@ -1,8 +1,8 @@
 import { createContext, useContext, useMemo } from "react";
-import { AuthContext, urlBase } from "./SessionService";
+import { SessionService, urlBase } from "./SessionService";
 
 export const CollectionServiceContext = createContext({
-  isInitialized: false,
+  isInitialized: true,
 });
 
 export const useCollectionService = () => {
@@ -18,11 +18,10 @@ export const useCollectionService = () => {
 export const CollectionServiceProvider = ({
   children,
 }) => {
-  const context = useContext(AuthContext);
+  const context = useContext(SessionService);
+  console.log(context)
   const value = useMemo(() => {
-    if (context.status !== "auth") {
-      return { isInitialized: false };
-    }
+   
     return {
       isInitialized: true,
       value: {
@@ -165,7 +164,6 @@ export const CollectionServiceProvider = ({
           return query ? ["category", query] : ["category"];
         },
         getCategory: async ({ queryKey }) => {
-          // eslint-disable-next-line @typescript-eslint/no-unused-vars
           const [, query] = queryKey;
 
           const response = await context.value.fetcher(`${urlBase}/category`, {
@@ -181,7 +179,6 @@ export const CollectionServiceProvider = ({
           return result.categories_array;
         },
         collectionAdminList: async ({ queryKey }) => {
-          // eslint-disable-next-line @typescript-eslint/no-unused-vars
           const [, query] = queryKey;
 
           const response = await context.value.fetcher(

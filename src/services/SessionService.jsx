@@ -1,3 +1,4 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   createContext,
@@ -5,14 +6,15 @@ import {
   useMemo
 } from "react";
 
+
 export const urlBase = "https://toss-a-coin.azurewebsites.net";
 
-export const AuthContext = createContext({
+export const SessionService = createContext({
   status: "loading",
 });
 
 export const useAuthService = () => {
-  const context = useContext(AuthContext);
+  const context = useContext(SessionService);
 
   if (context.status !== "auth") {
     throw new Error("AuthService not defined");
@@ -22,7 +24,7 @@ export const useAuthService = () => {
 };
 
 export const useAnonService = () => {
-  const context = useContext(AuthContext);
+  const context = useContext(SessionService);
 
   if (context.status !== "anon") {
     throw new Error("AnonService not defined");
@@ -32,7 +34,7 @@ export const useAnonService = () => {
 };
 
 export const useSessionStatus = () => {
-  const context = useContext(AuthContext);
+  const context = useContext(SessionService);
 
   return context.status;
 };
@@ -46,9 +48,8 @@ export const SessionServiceProvider = ({ children }) => {
   const { data } = useQuery({
     queryKey: getSessionQueryKey(),
     queryFn: async () => {
-      const authorization = localStorage.getItem("authorization");
-      const role = localStorage.getItem("role");
-
+      const authorization = await AsyncStorage.getItem("authorization");
+      const role = await AsyncStorage.getItem("role");
       return authorization && role
         ? {
             status: "auth",
@@ -62,7 +63,6 @@ export const SessionServiceProvider = ({ children }) => {
     refetchOnWindowFocus: false,
     
   });
-
   const value = useMemo(() => {
     switch (data?.status) {
       case "anon":
@@ -88,8 +88,8 @@ export const SessionServiceProvider = ({ children }) => {
               if (!response.ok || !result) {
                 throw new Error(result.error);
               }
-              localStorage.setItem("authorization", str);
-              localStorage.setItem("role", result.user_role[0].authority);
+              await AsyncStorage.setItem("authorization", str);
+              await AsyncStorage.setItem("role", result.user_role[0].authority);
               client.setQueryData(getSessionQueryKey(), {
                 status: "auth",
                 authorization: str,
@@ -117,8 +117,8 @@ export const SessionServiceProvider = ({ children }) => {
                     encodeURIComponent(values.email + ":" + values.password)
                   )
                 );
-              localStorage.setItem("authorization", str);
-              localStorage.setItem("role", result.user_role[0].authority);
+                await AsyncStorage.setItem("authorization", str);
+                await AsyncStorage.setItem("role", result.user_role[0].authority);
               client.setQueryData(getSessionQueryKey(), {
                 status: "auth",
                 authorization: str,
@@ -132,8 +132,8 @@ export const SessionServiceProvider = ({ children }) => {
         return {
           status: "auth",
           value: {
-            signOut: () => {
-              localStorage.removeItem("authorization");
+            signOut: async () => {
+              await AsyncStorage.removeItem("authorization");
               client.setQueryData(getSessionQueryKey(), {
                 status: "anon",
               });
@@ -154,7 +154,7 @@ export const SessionServiceProvider = ({ children }) => {
               });
 
               if (response.status === 401) {
-                localStorage.removeItem("authorization");
+                await AsyncStorage.removeItem("authorization");
                 client.setQueryData(getSessionQueryKey(), {
                   status: "anon",
                 });
@@ -171,6 +171,6 @@ export const SessionServiceProvider = ({ children }) => {
     }
   }, [data, client]);
 
-  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+  return <SessionService.Provider value={value}>{children}</SessionService.Provider>;
 };
 

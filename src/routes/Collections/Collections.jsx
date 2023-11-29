@@ -1,4 +1,3 @@
-import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
 import { useNavigation } from '@react-navigation/native';
 import { useQuery } from '@tanstack/react-query';
 import React, { useEffect, useState } from 'react';
@@ -46,15 +45,15 @@ const Collections = () => {
         }}
       >
         <TouchableOpacity>
-          <SearchOutlinedIcon />
+          {/* <SearchOutlinedIcon /> */}
         </TouchableOpacity>
 
         <TextInput
           style={{
-            borderColor: 'green.300',
+            borderColor: '#1A6F00',
             borderRadius: 4,
             borderWidth: 2,
-            fontSize: 'md',
+            fontSize: 20,
             fontWeight: 'semibold',
             marginTop: 6,
             width: '100%',
@@ -73,7 +72,7 @@ const Collections = () => {
         <View style={{ alignItems: 'center', height: '100%', justifyContent: 'center', width: '100%' }}>
           <View
             style={{
-              backgroundColor: 'green.400',
+              backgroundColor: '#004D00',
               borderRadius: 'md',
               padding: 4,
               textAlign: 'center',
@@ -82,7 +81,7 @@ const Collections = () => {
             <Text
               style={{
                 color: 'white',
-                fontSize: 'xl',
+                fontSize: 24,
                 fontWeight: 'semibold',
                 textAlign: 'center',
               }}
@@ -94,10 +93,10 @@ const Collections = () => {
           <TouchableOpacity onPress={() => navigation.navigate(paths.create)}>
             <View
               style={{
-                backgroundColor: 'green.400',
+                backgroundColor: '#004D00',
                 borderRadius: 'md',
                 color: 'white',
-                fontSize: 'xl',
+                fontSize: 24,
                 fontWeight: 'semibold',
                 marginTop: 4,
                 padding: 4,
@@ -130,7 +129,7 @@ const Collections = () => {
                 onPress={() => navigation.navigate(paths.collection(item.id))}
                 style={{
                   backgroundColor: 'white',
-                  borderColor: 'dark.100',
+                  borderColor: '#A1A2A2',
                   borderRadius: 'lg',
                   borderWidth: 2,
                   cursor: 'pointer',
@@ -145,7 +144,7 @@ const Collections = () => {
                   style={{ borderTopLeftRadius: 10, borderTopRightRadius: 10, height: 48 }}
                 />
                 <View style={{ flexDirection: 'column', height: '100%', justifyContent: 'space-between', padding: 4 }}>
-                  <Text numberOfLines={1} style={{ color: 'black', fontSize: 'lg', fontWeight: 'bold' }}>
+                  <Text numberOfLines={1} style={{ color: 'black', fontSize: 28, fontWeight: 'bold' }}>
                     {item.title}
                   </Text>
                   <View style={{ height: 3, borderRadius: 'lg', backgroundColor: 'red', width: '100%' }}>
@@ -156,7 +155,7 @@ const Collections = () => {
                       }}
                     />
                   </View>
-                  <Text style={{ color: 'black', fontSize: 'xl', fontWeight: 'bold' }}>
+                  <Text style={{ color: 'black', fontSize: 24, fontWeight: 'bold' }}>
                     {item.collected_money}zł of {item.goal}zł
                   </Text>
                 </View>

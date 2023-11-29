@@ -37,7 +37,7 @@ const styles = StyleSheet.create({
   horizontalScrollbar: {
     flexDirection: 'row',
     backgroundColor: 'transparent',
-    borderColor: 'green',
+    borderColor: '#1A6F00',
     borderRadius: 3,
     borderWidth: 2,
     position: 'absolute',
@@ -47,7 +47,7 @@ const styles = StyleSheet.create({
   verticalScrollbar: {
     flexDirection: 'column',
     backgroundColor: 'transparent',
-    borderColor: 'green',
+    borderColor: '#1A6F00',
     borderRadius: 3,
     borderWidth: 2,
     position: 'absolute',

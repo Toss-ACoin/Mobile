@@ -2,12 +2,14 @@ import { useNavigation } from '@react-navigation/native'; // Make sure to use na
 import React from 'react';
 import { ImageBackground, Text, TouchableOpacity, View } from 'react-native';
 import { paths } from '../../utils/paths';
+import MainNavigator from '../MainNavigator';
 import lp from './assets/lp.png';
-
 const LandingPage = () => {
   const navigation = useNavigation();
 
   return (
+    <>
+    
     <ImageBackground
       source={lp}
       style={{
@@ -30,7 +32,7 @@ const LandingPage = () => {
           style={{
             backgroundColor: 'red',
             borderWidth: 1,
-            borderColor: 'dark.400',
+            borderColor: '#282929',
             paddingVertical: 12,
             paddingHorizontal: 24,
             borderRadius: 8,
@@ -42,6 +44,9 @@ const LandingPage = () => {
         </TouchableOpacity>
       </View>
     </ImageBackground>
+    <MainNavigator/>
+
+    </>
   );
 };
 

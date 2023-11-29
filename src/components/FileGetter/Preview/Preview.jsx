@@ -30,7 +30,7 @@ const Preview = ({ files, removeFile }) => {
 
 const styles = StyleSheet.create({
   container: {
-    borderColor: 'darkgray',
+    borderColor: '#5A5A5A',
     borderRadius: 8,
     borderWidth: 1,
     height: 64,

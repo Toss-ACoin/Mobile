@@ -1,11 +1,20 @@
+import { useNavigation } from '@react-navigation/native';
 import { useQuery } from '@tanstack/react-query';
 import React from 'react';
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import { Avatar, Button, Divider } from 'react-native-elements'; // Make sure to install react-native-elements
 import EditIcon from 'react-native-vector-icons/MaterialIcons'; // You need to install this library
+import { useSessionStatus } from '../../../services/SessionService';
 import { useUserService } from '../../../services/UserService';
+import { paths } from '../../../utils/paths';
 
 const UserData = () => {
+  const sessionStatus = useSessionStatus();
+  const navigation = useNavigation()
+  if (sessionStatus !== 'auth') {
+    navigation.navigate(paths.signIn);
+    return null;
+  }
   const userService = useUserService();
   const { data, status } = useQuery(userService.userListKey(), userService.getUserDate);
 

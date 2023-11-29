@@ -41,7 +41,7 @@ const FileGetter = ({ files, onFileUpload }) => {
         onPress={handleImagePicker}
         style={styles.uploadContainer}
       >
-        <ArrowUpwardRoundedIcon fill="darkgray" />
+        <ArrowUpwardRoundedIcon fill="#5A5A5A" />
         <Text style={styles.uploadText}>
           Upload pictures, drag some files, or click to select
         </Text>
@@ -71,7 +71,7 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
   },
   uploadContainer: {
-    borderColor: 'darkgray',
+    borderColor: '#5A5A5A',
     borderRadius: 8,
     borderWidth: 1,
     flexDirection: 'column',
@@ -81,7 +81,7 @@ const styles = StyleSheet.create({
     marginVertical: 10,
   },
   uploadText: {
-    color: 'darkgray',
+    color: '#5A5A5A',
     fontWeight: 'semibold',
     textAlign: 'center',
   },

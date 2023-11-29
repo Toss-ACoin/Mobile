@@ -3,7 +3,7 @@ import {
   useContext,
   useMemo
 } from "react";
-import { AuthContext, urlBase } from "./SessionService";
+import { SessionService, urlBase } from "./SessionService";
 
 export const UserContext = createContext({
   isInitialized: false,
@@ -20,7 +20,7 @@ export const useUserService = () => {
 };
 
 export const UserServiceProvider = ({ children }) => {
-  const context = useContext(AuthContext);
+  const context = useContext(SessionService);
   const value = useMemo(() => {
     if (context.status !== "auth") {
       return { isInitialized: false };

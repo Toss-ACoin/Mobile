@@ -6,9 +6,15 @@ import {
 } from 'react-native';
 import { FileGetter } from '../../components/FileGetter/FileGetter';
 import { useCollectionService } from '../../services/CollectionService';
+import { useSessionStatus } from '../../services/SessionService';
 import { paths } from '../../utils/paths';
 
 const CreateCollection = ({navigation}) => {
+  const status = useSessionStatus();
+  if (status !== 'auth') {
+    navigation.navigate(paths.signIn);
+    return null;
+  }
   const collectionService = useCollectionService();
 
   const [step, setStep] = useState(0);
