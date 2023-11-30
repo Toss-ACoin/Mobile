@@ -55,9 +55,7 @@ export const CollectionServiceProvider = ({
           const [, query] = queryKey;
 
           const response = await fetch(
-            `${urlBase}/search?phrase=${query ? query.query : ""}&page=${
-              query ? query.page : 0
-            }`,
+            `${urlBase}/search?phrase=${query ? query.query : ""}`,
             {
               method: "GET",
               headers: {

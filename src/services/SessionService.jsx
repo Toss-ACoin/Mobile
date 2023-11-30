@@ -8,7 +8,7 @@ import {
 } from "react";
 
 
-export const urlBase = "https://toss-a-coin.azurewebsites.net";
+export const urlBase = "http://192.168.0.143:8080";
 
 export const SessionService = createContext({
   status: "loading",
@@ -74,11 +74,9 @@ export const SessionServiceProvider = ({ children }) => {
               const str =
                 "Basic " +
                 btoa(
-                  unescape(
-                    encodeURIComponent(value.email + ":" + value.password)
-                  )
+                  value.email + ":" + value.password
+                  
                 );
-
               const response = await fetch(`${urlBase}/loginBasic`, {
                 method: "GET",
                 headers: {
@@ -86,13 +84,10 @@ export const SessionServiceProvider = ({ children }) => {
                   Authorization: str,
                 },
               });
-              console.log(response)
-
               const result = await response.json();
               if (!response.ok || !result) {
                 throw new Error(result.error);
               }
-
               await AsyncStorage.setItem("authorization", str);
               await AsyncStorage.setItem("role", result.user_role[0].authority);
               client.setQueryData(getSessionQueryKey(), {
@@ -102,32 +97,35 @@ export const SessionServiceProvider = ({ children }) => {
               });
               return Promise.resolve();
             },
+            
             signUp: async (values) => {
+              console.log(values)
               const response = await fetch(`${urlBase}/register`, {
                 method: "POST",
                 headers: {
                   accept: "*/*",
                   "Content-Type": "application/json",
                 },
-                body: JSON.stringify(values),
+                body: JSON.stringify({"value": values}),
               });
               const result = await response.json();
+
               if (!response.ok || !result.User) {
                 throw new Error(result.error);
               }
               const str =
                 "Basic " +
-                window.btoa(
+                btoa(
                   unescape(
                     encodeURIComponent(values.email + ":" + values.password)
                   )
                 );
                 await AsyncStorage.setItem("authorization", str);
-                await AsyncStorage.setItem("role", result.user_role[0].authority);
+                await AsyncStorage.setItem("role", result.User.role);
               client.setQueryData(getSessionQueryKey(), {
                 status: "auth",
                 authorization: str,
-                role: result.user_role[0].authority,
+                role: result.User.role,
               });
               return Promise.resolve();
             },
@@ -178,4 +176,3 @@ export const SessionServiceProvider = ({ children }) => {
 
   return <SessionService.Provider value={value}>{children}</SessionService.Provider>;
 };
-

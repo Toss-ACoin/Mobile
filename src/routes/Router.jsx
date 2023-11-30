@@ -55,9 +55,9 @@ const Router = () => {
   return (
     <NavigationContainer>
       <Tab.Navigator screenOptions={{ headerShown: false }}>
-        <Tab.Screen name={paths.collections} component={CollectionsListScreen} />
-        <Tab.Screen name={paths.create} component={CreateCollectionScreen} />
-        <Tab.Screen name={paths.profile} component={ProfileScreen} />
+        <Tab.Screen name={'CollectionsListScreen'} component={CollectionsListScreen} />
+        <Tab.Screen name={'CreateCollectionScreen'} component={CreateCollectionScreen} />
+        <Tab.Screen name={'ProfileScreen'} component={ProfileScreen} />
       </Tab.Navigator>
     </NavigationContainer>
   );
