@@ -87,10 +87,12 @@ export const SessionServiceProvider = ({ children }) => {
                 },
               });
               console.log(response)
+
               const result = await response.json();
               if (!response.ok || !result) {
                 throw new Error(result.error);
               }
+
               await AsyncStorage.setItem("authorization", str);
               await AsyncStorage.setItem("role", result.user_role[0].authority);
               client.setQueryData(getSessionQueryKey(), {
