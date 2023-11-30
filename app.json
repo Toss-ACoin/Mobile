@@ -16,19 +16,26 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "infoPlist": {
-        "NSAppTransportSecurity": {
-          "NSExceptionDomains": {
-            "yourdomain.com": {
-              "NSIncludesSubdomains": true,
-              "NSTemporaryExceptionAllowsInsecureHTTPLoads": true,
-              "NSTemporaryExceptionMinimumTLSVersion": "TLSv1.1"
+      "config": {
+        "usesCleartextTraffic": true,
+        "infoPlist": {
+          "NSAppTransportSecurity": {
+            "NSAllowsArbitraryLoads": true,
+            "NSExceptionDomains": {
+              "192.168.0.143": {
+                "NSIncludesSubdomains": true,
+                "NSTemporaryExceptionAllowsInsecureHTTPLoads": true,
+                "NSTemporaryExceptionMinimumTLSVersion": "TLSv1.1"
+              }
             }
           }
         }
       }
     },
     "android": {
+      "config": {
+        "usesCleartextTraffic": true
+      },
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
