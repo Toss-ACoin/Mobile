@@ -44,6 +44,7 @@ function ProfileScreen() {
       <ProfileStack.Screen name={paths.profile} component={UserPanel} />
       <ProfileStack.Screen name={paths.myCollections} component={UserCollections} />
       <ProfileStack.Screen name={paths.signIn} component={SignIn} />
+      <ProfileStack.Screen name={paths.signUp} component={SignUpPage} />
     </ProfileStack.Navigator>
   );
 }

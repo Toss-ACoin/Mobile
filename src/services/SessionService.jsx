@@ -1,5 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { encode as btoa } from 'base-64';
 import {
   createContext,
   useContext,
@@ -72,11 +73,12 @@ export const SessionServiceProvider = ({ children }) => {
             signIn: async (value) => {
               const str =
                 "Basic " +
-                window.btoa(
+                btoa(
                   unescape(
                     encodeURIComponent(value.email + ":" + value.password)
                   )
                 );
+
               const response = await fetch(`${urlBase}/loginBasic`, {
                 method: "GET",
                 headers: {
@@ -84,6 +86,7 @@ export const SessionServiceProvider = ({ children }) => {
                   Authorization: str,
                 },
               });
+              console.log(response)
               const result = await response.json();
               if (!response.ok || !result) {
                 throw new Error(result.error);

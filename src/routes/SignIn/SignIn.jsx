@@ -2,7 +2,7 @@ import { useMutation } from '@tanstack/react-query';
 import { Formik } from 'formik';
 import React from 'react';
 import { ImageBackground, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
-import { useSessionStatus } from '../../services/SessionService';
+import { useAnonService, useSessionStatus } from '../../services/SessionService';
 import { paths } from '../../utils/paths';
 const SignIn = ({navigation}) => {
   const status = useSessionStatus();
@@ -13,16 +13,12 @@ const SignIn = ({navigation}) => {
     return null;
   }
 
-  // const anonService = useAnonService();
-  const { mutate } = useMutation(() => console.log('anonService.signIn'));
+  const anonService = useAnonService();
+  const { mutate } = useMutation(anonService.signIn);
 
   const handleSubmit = (values) => {
-      mutate(values, {
-        onError: (error) => {
-          // Handle errors, e.g., display a toast
-          console.error(error);
-        },
-      });
+    console.log(values)
+    mutate(values);
 
   };
 
