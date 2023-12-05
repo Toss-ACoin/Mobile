@@ -3,7 +3,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import React from 'react';
 import { paths } from '../utils/paths';
-import CollectionPage from './CollectionPage/CollectionPage';
+import { CollectionPage } from './CollectionPage/CollectionPage';
 import Collections from './Collections/Collections';
 import CreateCollection from './CreateCollection/CreateCollection';
 import SignIn from './SignIn/SignIn';
@@ -19,7 +19,7 @@ function CollectionsListScreen() {
     <CollectionsListStack.Navigator screenOptions={{ headerShown: false }}>
       <CollectionsListStack.Screen name={paths.collections} component={Collections} />
       <CollectionsListStack.Screen name={paths.create} component={CreateCollection} />
-      <CollectionsListStack.Screen name={'collectionPage'} component={CollectionPage} />
+      <CollectionsListStack.Screen name={paths.collection} component={CollectionPage} />
     </CollectionsListStack.Navigator>
   );
 }

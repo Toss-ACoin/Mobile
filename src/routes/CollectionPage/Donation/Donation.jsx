@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
-import { Button, CheckBox, View } from 'react-native';
+import { Button, View } from 'react-native';
 import Modal from 'react-native-modal';
-import PayPal from './PayPal/PayPal'; // Make sure to import your PayPal component
 
-const Donation = ({ name, collectionId }) => {
+export const Donation = ({ name, collectionId }) => {
   const [amount, setAmount] = useState();
   const [isDisable, setIsDisable] = useState(true);
   const amountArray = [5, 10, 20, 50, 100, 200];
@@ -29,17 +28,17 @@ const Donation = ({ name, collectionId }) => {
             ))}
           </View>
 
-          <CheckBox
+          {/* <CheckBox
             value={!isDisable}
             onValueChange={() => setIsDisable((prev) => !prev)}
-          />
+          /> */}
 
-          <PayPal
+          {/* <PayPal
             collectionId={collectionId}
             isDisable={isDisable}
             name={name}
             value={amount}
-          />
+          /> */}
 
           <Button title="Close" onPress={toggleModal} />
         </View>
@@ -47,5 +46,3 @@ const Donation = ({ name, collectionId }) => {
     </>
   );
 };
-
-export default Donation;

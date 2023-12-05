@@ -5,7 +5,7 @@ import Carousel from "react-native-snap-carousel";
 const { width } = Dimensions.get("window");
 
 
-const ImgCarousel = ({ imgArray }) => {
+export const ImgCarousel = ({ imgArray }) => {
   const renderItem = ({ item }) => {
     return (
       <View style={{ height: "100%", width }}>
@@ -20,6 +20,7 @@ const ImgCarousel = ({ imgArray }) => {
 
   return (
     <Carousel
+      layout={'default'}
       data={imgArray}
       renderItem={renderItem}
       sliderWidth={width}
@@ -28,4 +29,3 @@ const ImgCarousel = ({ imgArray }) => {
   );
 };
 
-export default ImgCarousel;

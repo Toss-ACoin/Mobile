@@ -5,7 +5,7 @@ import { useNavigation, useRoute } from "@react-navigation/native";
 export const paths = {
   landingPage: "Home", // Replace with your actual home screen name
   collections: "Collections",
-  collection: (collectionId) => `Collection/${collectionId}`, // Replace with your actual collection screen name
+  collection: `Collection`, // Replace with your actual collection screen name
   about: "About", // Replace with your actual about screen name
   profile: "Profile", // Replace with your actual profile screen name
   signIn: "SignIn", // Replace with your actual sign-in screen name

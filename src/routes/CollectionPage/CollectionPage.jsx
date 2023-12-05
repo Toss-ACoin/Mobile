@@ -1,26 +1,23 @@
 import { useQuery } from '@tanstack/react-query';
 import React from 'react';
-import { ScrollView, Text, View } from 'react-native';
+import { SafeAreaView, ScrollView, StatusBar, Text, View } from 'react-native';
 import { Spinner } from 'react-native-elements';
 import { useCollectionService } from '../../services/CollectionService';
-import { useCollectionId } from '../../utils/paths';
 import { Bubble } from './Bubble/Bubble';
 import { Donation } from './Donation/Donation';
 import { ImgCarousel } from './ImgCarousel/ImgCarousel';
-import photo from './assets/img.png';
 
-const CollectionPage = () => {
-  const id = useCollectionId();
+export const CollectionPage = ({ navigation, route }) => {
+  const { _id } = route.params;
   const collectionService = useCollectionService();
 
-  if (!id) {
-    // You might want to handle this case differently in React Native
-    // Maybe navigate to an error page or display an error message
-    return null;
+  if (!_id) {
+    navigation.navigate(paths.notFound);
+    return null
   }
 
   const { data, status } = useQuery(
-    collectionService.collectionKey(`${id}`),
+    collectionService.collectionKey(`${_id}`),
     collectionService.collection
   );
 
@@ -32,31 +29,32 @@ const CollectionPage = () => {
     // Handle error, navigate to an error page or display an error message
     return <Text>Error</Text>;
   }
+  const photoSrc = 'https://i.imgur.com/UYiroysl.jpg';
 
   return (
-    <ScrollView style={{ paddingHorizontal: 40, paddingVertical: 16 }}>
-      <View style={{ flexDirection: 'row', gap: 8, maxHeight: 'calc(100vh - 80px - 128px)', maxWidth: 'calc(100vw - 256px)' }}>
-        <ImgCarousel imgArray={[photo, photo, photo]} />
-        <View style={{ flexDirection: 'column', gap: 6, maxHeight: 560 }}>
-          <Text style={{ fontSize: 32, fontWeight: 'bold' }}>{data.title}</Text>
-          <Text style={{ fontSize: 20, fontWeight: 'bold' }}>
-            {`${data.collected_money}zł of ${data.goal}zł`}
-          </Text>
-          <View style={{ borderRadius: 10, height: 9, backgroundColor: 'red', width: '100%' }} />
-          <Donation collectionId={data.id} name={data.title} />
+    <SafeAreaView style={{ paddingHorizontal: 40, paddingBottom: 16, paddingTop: StatusBar.currentHeight || 0, flex: 1 }}>
+      <ScrollView >
+        <View style={{ flexDirection: 'column', gap: 6, height: "100%" }}>
+          <ImgCarousel imgArray={[photoSrc, photoSrc, photoSrc]} />
+          <View style={{ flexDirection: 'column', gap: 6, }}>
+            <Text style={{ fontSize: 32, fontWeight: 'bold' }}>{data.title}</Text>
+            <Text style={{ fontSize: 20, fontWeight: 'bold' }}>
+              {`${data.collected_money}zł of ${data.goal}zł`}
+            </Text>
+            <View style={{ borderRadius: 10, height: 9, backgroundColor: 'red', width: '100%' }} />
+            <Donation collectionId={data.id} name={data.title} />
+          </View>
         </View>
-      </View>
-      <View style={{ flexDirection: 'column', gap: 8 }}>
-        <Text style={{ fontSize: 24, fontWeight: 'bold' }}>Description</Text>
-        <View style={{ flexDirection: 'column', fontSize: 20, gap: 4 }}>
-          <Text>{data.description}</Text>
+        <View style={{ flexDirection: 'column', gap: 8 }}>
+          <Text style={{ fontSize: 24, fontWeight: 'bold' }}>Description</Text>
+          <View style={{ flexDirection: 'column', fontSize: 20, gap: 4 }}>
+            <Text>{data.description}</Text>
+          </View>
         </View>
-      </View>
-      <View style={{ borderColor: '#767777', borderRadius: 'md', borderWidth: 1, justifyContent: 'center', overflow: 'hidden', padding: 6 }}>
-        <Bubble data={data.transactions} />
-      </View>
-    </ScrollView>
+        <View style={{ borderColor: '#767777', borderRadius: 6, borderWidth: 1, justifyContent: 'center', overflow: 'hidden', padding: 6 }}>
+          <Bubble data={data.transactions} />
+        </View>
+      </ScrollView>
+    </SafeAreaView>
   );
 };
-
-export default CollectionPage;

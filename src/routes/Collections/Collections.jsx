@@ -1,4 +1,3 @@
-import { useNavigation } from '@react-navigation/native';
 import { useQuery } from '@tanstack/react-query';
 import React, { useEffect, useState } from 'react';
 import {
@@ -17,8 +16,7 @@ import { useDebounce } from '../../hooks/useDebounce';
 import { useCollectionService } from '../../services/CollectionService';
 import { paths } from '../../utils/paths';
 
-const Collections = () => {
-  const navigation = useNavigation();
+const Collections = ({ navigation }) => {
   const collectionService = useCollectionService();
   const [search, setSearch] = useState('');
   const [query, setQuery] = useState('');
@@ -36,9 +34,9 @@ const Collections = () => {
     ToastAndroid.show(message, ToastAndroid.SHORT);
   };
 
-  const card = (cardData) => (
+  const card = (cardData, navigation) => (
     <TouchableOpacity
-      onPress={() => navigation.navigate(paths.collection(cardData.id))}
+      onPress={() => navigation.navigate(paths.collection, { _id: cardData.id })}
       style={{
         backgroundColor: 'white',
         borderColor: '#A1A2A2',
@@ -159,7 +157,7 @@ const Collections = () => {
               flex: 1
             }}
             data={data}
-            renderItem={({ item }) => card(item)}
+            renderItem={({ item }) => card(item, navigation)}
             keyExtractor={(item) => item.id}
             initialNumToRender={4}
             getItemCount={(_data) => _data.length}

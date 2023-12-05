@@ -1,7 +1,7 @@
 import React from 'react';
 import { Text, View } from 'react-native';
 
-const Bubble = ({ data }) => {
+export const Bubble = ({ data }) => {
   return (
     <>
       {!data ? (
@@ -31,14 +31,14 @@ const Bubble = ({ data }) => {
                     numberOfPayments > 99
                       ? 24
                       : numberOfPayments > 50
-                      ? 18
-                      : 14,
+                        ? 18
+                        : 14,
                   fontWeight:
                     numberOfPayments > 99
                       ? 'bold'
                       : numberOfPayments > 50
-                      ? '600'
-                      : 'normal',
+                        ? '600'
+                        : 'normal',
                   color: 'white',
                 }}
               >
@@ -52,4 +52,3 @@ const Bubble = ({ data }) => {
   );
 };
 
-export default Bubble;
