@@ -21,7 +21,7 @@ export const CollectionServiceProvider = ({
   const context = useContext(SessionService);
   console.log(context)
   const value = useMemo(() => {
-   
+
     return {
       isInitialized: true,
       value: {

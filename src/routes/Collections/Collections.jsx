@@ -3,13 +3,16 @@ import { useQuery } from '@tanstack/react-query';
 import React, { useEffect, useState } from 'react';
 import {
   Image,
-  ScrollView,
+  SafeAreaView,
+  StatusBar,
   Text,
   TextInput,
   ToastAndroid,
   TouchableOpacity,
   View,
+  VirtualizedList
 } from 'react-native';
+import { } from 'react-native-web';
 import { useDebounce } from '../../hooks/useDebounce';
 import { useCollectionService } from '../../services/CollectionService';
 import { paths } from '../../utils/paths';
@@ -33,8 +36,50 @@ const Collections = () => {
     ToastAndroid.show(message, ToastAndroid.SHORT);
   };
 
+  const card = (cardData) => (
+    <TouchableOpacity
+      onPress={() => navigation.navigate(paths.collection(cardData.id))}
+      style={{
+        backgroundColor: 'white',
+        borderColor: '#A1A2A2',
+        borderRadius: 8,
+        borderWidth: 2,
+        cursor: 'pointer',
+        flexDirection: 'column',
+        height: 324,
+        overflow: 'hidden',
+        marginHorizontal: 20,
+        marginVertical: 10
+      }}
+    >
+      <Image
+        source={require('../CollectionPage/assets/img.png')}
+        style={{ borderTopLeftRadius: 10, borderTopRightRadius: 10, height: '60%' }}
+      />
+      <View style={{ flexDirection: 'column', height: '40%', justifyContent: 'space-between', padding: 4 }}>
+        <Text numberOfLines={1} style={{ color: 'black', fontSize: 28, fontWeight: 'bold' }}>
+          {cardData.title}
+        </Text>
+        <View style={{ height: 8, borderRadius: 8, backgroundColor: 'red', width: '100%' }}>
+          <View
+            style={{
+              height: 8,
+              borderRadius: 8,
+              backgroundColor: 'white',
+              width: `${((cardData.collected_money / cardData.goal) * 100).toFixed(2)}%`,
+            }}
+          />
+        </View>
+        <Text style={{ color: 'black', fontSize: 24, fontWeight: 'bold' }}>
+          {cardData.collected_money}zł of {cardData.goal}zł
+        </Text>
+      </View>
+    </TouchableOpacity>
+  )
+
+
   return (
-    <View style={{ alignItems: 'center', flexDirection: 'column', paddingBottom: 16 }}>
+    <View style={{ alignItems: 'center', flexDirection: 'column', paddingBottom: 16, paddingTop: StatusBar.currentHeight || 0 }}>
       <View
         style={{
           alignItems: 'center',
@@ -73,7 +118,7 @@ const Collections = () => {
           <View
             style={{
               backgroundColor: '#004D00',
-              borderRadius: 'md',
+              borderRadius: 6,
               padding: 4,
               textAlign: 'center',
             }}
@@ -94,7 +139,7 @@ const Collections = () => {
             <View
               style={{
                 backgroundColor: '#004D00',
-                borderRadius: 'md',
+                borderRadius: 6,
                 color: 'white',
                 fontSize: 24,
                 fontWeight: 'semibold',
@@ -108,80 +153,19 @@ const Collections = () => {
           </TouchableOpacity>
         </View>
       ) : (
-        <ScrollView
-          style={{
-            columnGap: 8,
-            gap: 8,
-            height: '100%',
-            justifyContent: 'center',
-            minChildWidth: 72,
-            paddingHorizontal: '24%',
-            paddingVertical: 8,
-            width: '100%',
-          }}
-        >
-          {data.map((item, key) => {
-            const endsIn = new Date(item.fundraising_end).getTime() - new Date().getTime();
-
-            return (
-              <TouchableOpacity
-                key={key}
-                onPress={() => navigation.navigate(paths.collection(item.id))}
-                style={{
-                  backgroundColor: 'white',
-                  borderColor: '#A1A2A2',
-                  borderRadius: 'lg',
-                  borderWidth: 2,
-                  cursor: 'pointer',
-                  flexDirection: 'column',
-                  height: 96,
-                  overflow: 'hidden',
-                  width: 72,
-                }}
-              >
-                <Image
-                  source={require('../CollectionPage/assets/img.png')}
-                  style={{ borderTopLeftRadius: 10, borderTopRightRadius: 10, height: 48 }}
-                />
-                <View style={{ flexDirection: 'column', height: '100%', justifyContent: 'space-between', padding: 4 }}>
-                  <Text numberOfLines={1} style={{ color: 'black', fontSize: 28, fontWeight: 'bold' }}>
-                    {item.title}
-                  </Text>
-                  <View style={{ height: 3, borderRadius: 'lg', backgroundColor: 'red', width: '100%' }}>
-                    <View
-                      style={{
-                        height: '100%',
-                        width: `${((item.collected_money / item.goal) * 100).toFixed(2)}%`,
-                      }}
-                    />
-                  </View>
-                  <Text style={{ color: 'black', fontSize: 24, fontWeight: 'bold' }}>
-                    {item.collected_money}zł of {item.goal}zł
-                  </Text>
-                </View>
-              </TouchableOpacity>
-            );
-          })}
-        </ScrollView>
-      )}
-      {!isLoading && data && (
-        <ScrollView horizontal style={{ flexDirection: 'row', marginTop: 3 }}>
-          {data.map((value, key) => (
-            <TouchableOpacity
-              key={key}
-              onPress={() => setPage(key)}
-              style={{
-                backgroundColor: 'green.500',
-                borderRadius: 'md',
-                marginLeft: 3,
-                paddingHorizontal: 8,
-                paddingVertical: 4,
-              }}
-            >
-              <Text style={{ color: 'white' }}>{value}</Text>
-            </TouchableOpacity>
-          ))}
-        </ScrollView>
+        <SafeAreaView style={{ justifyContent: 'center' }}>
+          <VirtualizedList
+            style={{
+              flex: 1
+            }}
+            data={data}
+            renderItem={({ item }) => card(item)}
+            keyExtractor={(item) => item.id}
+            initialNumToRender={4}
+            getItemCount={(_data) => _data.length}
+            getItem={(_data, index) => _data[index]}
+          />
+        </SafeAreaView>
       )}
     </View>
   );
