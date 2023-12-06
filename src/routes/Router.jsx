@@ -10,7 +10,7 @@ import SignIn from './SignIn/SignIn';
 import SignUpPage from './SignUpPage/SignUpPage';
 import UserCollections from './UserCollections/UserCollections';
 import UserPanel from './UserPanel/UserPanel';
-
+import { Ionicons } from '@expo/vector-icons';
 
 const CollectionsListStack = createNativeStackNavigator()
 
@@ -50,14 +50,33 @@ function ProfileScreen() {
 }
 
 const Tab = createBottomTabNavigator();
+const getTabBarIcon = (route, focused, color, size) => {
+  let iconName;
+  if (route.name === 'Collections List') {
+    iconName = focused ? 'albums' : 'albums-outline';
+  } else if (route.name === 'Create Collection') {
+    iconName = focused ? 'add-circle' : 'add-circle-outline';
+  } else if (route.name === 'User Profile') {
+    iconName = focused ? 'person' : 'person-outline';
+  }
+  return <Ionicons name={iconName} size={size} color={color} />;
+};
+const screenOptions= ({ route }) => ({
+  headerShown: false,
+  tabBarIcon: ({ focused, color, size }) =>
+    getTabBarIcon(route, focused, color, size),
+
+  tabBarActiveTintColor: 'red',
+  tabBarInactiveTintColor: 'gray',
+});
 
 const Router = () => {
   return (
     <NavigationContainer>
-      <Tab.Navigator screenOptions={{ headerShown: false }}>
-        <Tab.Screen name={'CollectionsListScreen'} component={CollectionsListScreen} />
-        <Tab.Screen name={'CreateCollectionScreen'} component={CreateCollectionScreen} />
-        <Tab.Screen name={'ProfileScreen'} component={ProfileScreen} />
+      <Tab.Navigator screenOptions={screenOptions}>
+        <Tab.Screen name={'Collections List'} component={CollectionsListScreen} />
+        <Tab.Screen name={'Create Collection'} component={CreateCollectionScreen} />
+        <Tab.Screen name={'User Profile'} component={ProfileScreen} />
       </Tab.Navigator>
     </NavigationContainer>
   );

@@ -65,11 +65,6 @@ const SignIn = ({navigation}) => {
                 secureTextEntry
                 value={values.password}
               />
-              <View style={styles.dividerContainer}>
-                <View style={styles.divider} />
-                <Text style={styles.dividerText}>OR</Text>
-                <View style={styles.divider} />
-              </View>
               {/* <View style={styles.socialButtonsContainer}>
                 <Facebook onLoginSuccess={handleFacebookLogin} />
                 <Google onSuccess={handleGoogleLogin} />
@@ -108,7 +103,7 @@ const styles = StyleSheet.create({
   logoContainer: {
     flexDirection: 'row',
     position: 'absolute',
-    top: 7,
+    top: 35,
     left: 8,
   },
   logoText: {
@@ -181,7 +176,6 @@ const styles = StyleSheet.create({
     resizeMode: 'cover',
   },
   signUpContainer: {
-    backgroundColor: 'rgba(0, 0, 0, 0.6)',
     padding: 16,
     justifyContent: 'center',
     alignItems: 'center',

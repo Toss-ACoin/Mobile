@@ -39,7 +39,7 @@ const styles = StyleSheet.create({
     marginTop: 2.5,
     paddingVertical: 8,
     textAlign: 'center',
-    width: '15%',
+    width: '25%',
   },
   menuContainer: {
     flexDirection: 'column',

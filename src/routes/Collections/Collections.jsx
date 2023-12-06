@@ -96,10 +96,10 @@ const Collections = ({ navigation }) => {
             borderColor: '#1A6F00',
             borderRadius: 4,
             borderWidth: 2,
-            fontSize: 20,
+            fontSize: 18,
             fontWeight: 'semibold',
-            marginTop: 6,
-            width: '100%',
+            marginTop: 35,
+            width: '200%',
           }}
           placeholder="Search"
           onChangeText={(text) => setSearch(text)}
@@ -115,7 +115,6 @@ const Collections = ({ navigation }) => {
         <View style={{ alignItems: 'center', height: '100%', justifyContent: 'center', width: '100%' }}>
           <View
             style={{
-              backgroundColor: '#004D00',
               borderRadius: 6,
               padding: 4,
               textAlign: 'center',
@@ -123,8 +122,8 @@ const Collections = ({ navigation }) => {
           >
             <Text
               style={{
-                color: 'white',
-                fontSize: 24,
+                color: 'gray',
+                fontSize: 20,
                 fontWeight: 'semibold',
                 textAlign: 'center',
               }}
@@ -141,12 +140,12 @@ const Collections = ({ navigation }) => {
                 color: 'white',
                 fontSize: 24,
                 fontWeight: 'semibold',
-                marginTop: 4,
-                padding: 4,
+                marginTop: 20,
+                padding: 6,
                 textAlign: 'center',
               }}
             >
-              <Text style={{ color: 'white', fontWeight: 'bold' }}>Create your collections</Text>
+              <Text style={{ color: 'white', fontWeight: 'bold' }}>Create your collection here</Text>
             </View>
           </TouchableOpacity>
         </View>

@@ -8,7 +8,7 @@ import {
 } from "react";
 
 
-export const urlBase = "http://192.168.0.143:8080";
+export const urlBase = "http://192.168.1.13:8080";
 
 export const SessionService = createContext({
   status: "loading",
@@ -53,16 +53,16 @@ export const SessionServiceProvider = ({ children }) => {
       const role = await AsyncStorage.getItem("role");
       return authorization && role
         ? {
-          status: "auth",
-          authorization,
-          role,
-        }
+            status: "auth",
+            authorization,
+            role,
+          }
         : { status: "anon" };
-    },
+    },    
     refetchOnMount: false,
     refetchOnReconnect: false,
     refetchOnWindowFocus: false,
-
+    
   });
   const value = useMemo(() => {
     switch (data?.status) {
@@ -75,7 +75,7 @@ export const SessionServiceProvider = ({ children }) => {
                 "Basic " +
                 btoa(
                   value.email + ":" + value.password
-
+                  
                 );
               const response = await fetch(`${urlBase}/loginBasic`, {
                 method: "GET",
@@ -97,7 +97,7 @@ export const SessionServiceProvider = ({ children }) => {
               });
               return Promise.resolve();
             },
-
+            
             signUp: async (values) => {
               console.log(values)
               const response = await fetch(`${urlBase}/register`, {
@@ -106,7 +106,7 @@ export const SessionServiceProvider = ({ children }) => {
                   accept: "*/*",
                   "Content-Type": "application/json",
                 },
-                body: JSON.stringify({ "value": values }),
+                body: JSON.stringify({"value": values}),
               });
               const result = await response.json();
 
@@ -120,8 +120,8 @@ export const SessionServiceProvider = ({ children }) => {
                     encodeURIComponent(values.email + ":" + values.password)
                   )
                 );
-              await AsyncStorage.setItem("authorization", str);
-              await AsyncStorage.setItem("role", result.User.role);
+                await AsyncStorage.setItem("authorization", str);
+                await AsyncStorage.setItem("role", result.User.role);
               client.setQueryData(getSessionQueryKey(), {
                 status: "auth",
                 authorization: str,
