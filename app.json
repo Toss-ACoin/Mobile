@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "TossACoin",
-    "slug": "TossACoin",
+    "slug": "toss-a-coin",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -30,7 +30,8 @@
             }
           }
         }
-      }
+      },
+      "bundleIdentifier": "com.mrdell.tossacoin"
     },
     "android": {
       "config": {
@@ -39,10 +40,19 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "googleServicesFile": "./google-services.json",
+      "useNextNotificationsApi": true,
+      "package": "com.mrdell.tossacoin"
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "extra": {
+      "eas": {
+        "projectId": "0ce20dff-0ff1-4067-99cc-d2673c417195"
+      }
+    },
+    "owner": "mrdell"
   }
 }

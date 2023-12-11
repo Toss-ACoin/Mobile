@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "106142218485",
+    "project_id": "tossacoin-c8469",
+    "storage_bucket": "tossacoin-c8469.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:106142218485:android:cf3034afba0eda9135adbc",
+        "android_client_info": {
+          "package_name": "com.mrdell.tossacoin"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAoewPYKiGuQG_Pg6uqY2Bs5UxIjS4Iaew"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

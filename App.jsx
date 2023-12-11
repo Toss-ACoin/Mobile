@@ -16,7 +16,7 @@ const App = () => {
           <UserServiceProvider>
             <CollectionServiceProvider>
               <PaymentServiceProvider>
-                    <Router />
+                <Router />
               </PaymentServiceProvider>
             </CollectionServiceProvider>
           </UserServiceProvider>
