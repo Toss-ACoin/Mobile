@@ -1,10 +1,7 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
 import React, { useState } from 'react';
-import {
-  Text,
-  View
-} from 'react-native';
-import { FileGetter } from '../../components/FileGetter/FileGetter';
+import { Alert, StyleSheet, Text, TextInput, TouchableOpacity, View} from 'react-native';
+import { Formik } from 'formik';
 import { useCollectionService } from '../../services/CollectionService';
 import { useSessionStatus } from '../../services/SessionService';
 import { paths } from '../../utils/paths';
@@ -33,13 +30,6 @@ const CreateCollection = ({navigation}) => {
     collectionService.getCategory
   );
 
-  const handleImageArray = (files) => {
-    const filesArray = files.map((file) => {
-      return file.file;
-    });
-
-    return filesArray;
-  };
 
   const { mutate } = useMutation(collectionService.addCollection);
 
@@ -52,7 +42,7 @@ const CreateCollection = ({navigation}) => {
   };
 
   const handleSubmit = () => {
-    const values = { ...collection, image: handleImageArray(files) };
+    const values = { ...collection };
 
     mutate(
       values,
@@ -69,37 +59,105 @@ const CreateCollection = ({navigation}) => {
   };
 
   return (
-    <View>
-      <View>
-        <Text>Create your Collection</Text>
-        <View>
-          {step === 0 ? (
-            <View>
-              {/* Other input fields */}
-              <Button
-                title="Next"
-                onPress={() => setStep(1)}
+    <View style={styles.container}>
+      <View style={styles.createCollectionContainer}>
+        <Text style={styles.createCollectionText}>Create your collection</Text>
+           <Formik initialValues={ {
+    title: '',
+    category: '',
+    goal: '',
+    description: '',
+    date: '',
+    }} onSubmit={handleSubmit}>
+      {({ handleChange, handleSubmit, values }) => (
+            <View style={styles.form}>
+              <TextInput
+                style={styles.input}
+                placeholder="Title"
+                placeholderTextColor="gray"
+                onChangeText={handleChange('title')}
+                value={values.title}
               />
+              <TextInput
+                style={styles.input}
+                placeholder="Category"
+                placeholderTextColor="gray"
+                onChangeText={handleChange('category')}
+                value={values.category}
+              />
+              <TextInput
+                style={styles.input}
+                placeholder="Goal"
+                placeholderTextColor="gray"
+                onChangeText={handleChange('goal')}
+                keyboardType='numeric'
+                value={values.goal}
+              />
+              <TextInput
+                style={styles.input}
+                placeholder="Description"
+                placeholderTextColor="gray"
+                onChangeText={handleChange('description')}
+                value={values.description}
+              />
+              <TextInput
+                style={styles.input}
+                placeholder="End Date"
+                placeholderTextColor="gray"
+                onChangeText={handleChange('date')}
+                value={values.date}
+              />
+              <TouchableOpacity onPress={handleSubmit}>
+                <View style={styles.createCollectionButton}>
+                  <Text style={styles.createCollectionButtonText}>Create</Text>
+                </View>
+              </TouchableOpacity>
             </View>
-          ) : (
-            <View>
-              <FileGetter files={files} onFileUpload={handleFileUpload} />
-              <View>
-                <Button
-                  title="Back"
-                  onPress={() => setStep(0)}
-                />
-                <Button
-                  title="Submit"
-                  onPress={handleSubmit}
-                />
-              </View>
-            </View>
-          )}
+      )}
+          </Formik>
         </View>
-      </View>
     </View>
   );
 };
 
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: 'white',
+  },
+  createCollectionContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 16,
+  },
+  createCollectionText: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    color: 'black',
+    marginBottom: 30,
+  },
+  form: {
+    width: '100%',
+  },
+  input: {
+    borderColor: '#1A6F00',
+    borderRadius: 8,
+    padding: 12,
+    marginBottom: 16,
+    color: 'black',
+  },
+  createCollectionButton: {
+    backgroundColor: 'red',
+    paddingVertical: 12,
+    paddingHorizontal: 24,
+    borderRadius: 8,
+  },
+  createCollectionButtonText: {
+    color: 'white',
+    fontSize: 18,
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
+});
 export default CreateCollection;

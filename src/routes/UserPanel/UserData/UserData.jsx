@@ -2,8 +2,9 @@ import { useNavigation } from '@react-navigation/native';
 import { useQuery } from '@tanstack/react-query';
 import React from 'react';
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
-import { Avatar, Button, Divider } from 'react-native-elements'; // Make sure to install react-native-elements
-import EditIcon from 'react-native-vector-icons/MaterialIcons'; // You need to install this library
+import { Avatar, Button, Divider } from 'react-native-elements';
+import EditIcon from 'react-native-vector-icons/MaterialIcons';
+import LogOutIcon from 'react-native-vector-icons/MaterialIcons'
 import { useSessionStatus } from '../../../services/SessionService';
 import { useUserService } from '../../../services/UserService';
 import { paths } from '../../../utils/paths';
@@ -30,12 +31,11 @@ const UserData = () => {
             <Avatar size="xlarge" />
             <View style={styles.userInfoText}>
               <Text style={styles.userName}>{data.name}</Text>
-              <Text style={styles.userDetails}>User Information</Text>
             </View>
             <View style={styles.editButton}>
               <Button
                 title="Edit"
-                icon={<EditIcon name="edit" size={24} color="white" />}
+                icon={<EditIcon name="edit" size={20} color="white" />}
                 buttonStyle={{ backgroundColor: 'red' }}
               />
             </View>
@@ -68,6 +68,14 @@ const UserData = () => {
               <Text style={styles.userDetailValue}>{data.bank_number}</Text>
             </View>
           </View>
+          <Divider style={styles.divider} />
+          <View style={styles.logOutButton}>
+              <Button
+                title="Log Out"
+                icon={<LogOutIcon name="logout" size={20} color="white" />}
+                buttonStyle={{ backgroundColor: 'red' }}
+              />
+          </View>
         </>
       )}
     </ScrollView>
@@ -84,7 +92,7 @@ const styles = StyleSheet.create({
     margin: 10,
   },
   userInfoText: {
-    marginLeft: 10,
+    marginLeft: 2,
     flex: 1,
   },
   userName: {
@@ -99,6 +107,12 @@ const styles = StyleSheet.create({
   },
   divider: {
     marginVertical: 10,
+  },
+  logOutButton: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginVertical: 20,
   },
   sectionTitle: {
     fontSize: 20,
