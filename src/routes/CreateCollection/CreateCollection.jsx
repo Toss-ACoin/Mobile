@@ -1,7 +1,7 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
 import React, { useState } from 'react';
 import { Alert, StyleSheet, Text, TextInput, TouchableOpacity, View} from 'react-native';
-import { Formik } from 'formik';
+import { useFormik } from 'formik';
 import { useCollectionService } from '../../services/CollectionService';
 import { useSessionStatus } from '../../services/SessionService';
 import { paths } from '../../utils/paths';
@@ -33,88 +33,82 @@ const CreateCollection = ({navigation}) => {
 
   const { mutate } = useMutation(collectionService.addCollection);
 
-  const collection = {
-    title: '',
-    category: '',
-    goal: '2000',
-    description: '',
-    date: '',
-  };
-
-  const handleSubmit = () => {
-    const values = { ...collection };
-
-    mutate(
-      values,
-      {
-        onError: () => {
-          // Handle error
-        },
-        onSuccess: () => {
-          // Handle success
-          navigation.navigate(paths.collections);
-        },
-      }
-    );
-  };
+    const formik = useFormik({
+    initialValues: {
+      title: '',
+      category: '',
+      goal: '2000',
+      description: '',
+      date: '',
+    },
+    onSubmit: (values) => {
+      mutate(
+        values,
+        {
+          onError: () => {
+            // Handle error
+          },
+          onSuccess: () => {
+            // Handle success
+            navigation.navigate(paths.collections);
+          },
+        }
+      );
+    },
+  });
 
   return (
     <View style={styles.container}>
       <View style={styles.createCollectionContainer}>
         <Text style={styles.createCollectionText}>Create your collection</Text>
-           <Formik initialValues={ {
-    title: '',
-    category: '',
-    goal: '',
-    description: '',
-    date: '',
-    }} onSubmit={handleSubmit}>
-      {({ handleChange, handleSubmit, values }) => (
             <View style={styles.form}>
+              <Text style={styles.labelText}>Enter title:</Text>
               <TextInput
                 style={styles.input}
                 placeholder="Title"
                 placeholderTextColor="gray"
-                onChangeText={handleChange('title')}
-                value={values.title}
+                onChangeText={formik.handleChange('title')}
+                value={formik.values.title}
               />
+              <Text style={styles.labelText}>Choose category:</Text>
               <TextInput
                 style={styles.input}
                 placeholder="Category"
                 placeholderTextColor="gray"
-                onChangeText={handleChange('category')}
-                value={values.category}
+                onChangeText={formik.handleChange('category')}
+                value={formik.values.category}
               />
+              <Text style={styles.labelText}>Enter your goal:</Text>
               <TextInput
                 style={styles.input}
                 placeholder="Goal"
                 placeholderTextColor="gray"
-                onChangeText={handleChange('goal')}
+                onChangeText={formik.handleChange('goal')}
                 keyboardType='numeric'
-                value={values.goal}
+                value={formik.values.goal}
               />
+              <Text style={styles.labelText}>Add description:</Text>
               <TextInput
                 style={styles.input}
                 placeholder="Description"
                 placeholderTextColor="gray"
-                onChangeText={handleChange('description')}
-                value={values.description}
+                onChangeText={formik.handleChange('description')}
+                value={formik.values.description}
               />
+              <Text style={styles.labelText}>Choose end date:</Text>
               <TextInput
                 style={styles.input}
                 placeholder="End Date"
                 placeholderTextColor="gray"
-                onChangeText={handleChange('date')}
-                value={values.date}
+                onChangeText={formik.handleChange('date')}
+                value={formik.values.date}
               />
-              <TouchableOpacity onPress={handleSubmit}>
+              <TouchableOpacity onPress={formik.handleSubmit}>
                 <View style={styles.createCollectionButton}>
                   <Text style={styles.createCollectionButtonText}>Create</Text>
                 </View>
               </TouchableOpacity>
             </View>
-      )}
-          </Formik>
         </View>
     </View>
   );
@@ -158,6 +152,11 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
     textAlign: 'center',
+  },
+  labelText: {
+    color: 'black',
+    fontSize: 15,
+    marginLeft: 5
   },
 });
 export default CreateCollection;

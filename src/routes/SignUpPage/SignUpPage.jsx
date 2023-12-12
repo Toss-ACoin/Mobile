@@ -50,7 +50,7 @@ const SignUpPage = () => {
             </TouchableOpacity>
           </View>
           <View style={styles.formContainer}>
-            <Text style={styles.formTitle}>Login to Your Account</Text>
+            <Text style={styles.formTitle}>Create Your Account</Text>
             <View style={styles.form}>
               <TextInput
                 style={styles.input}
