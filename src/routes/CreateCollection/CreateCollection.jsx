@@ -1,12 +1,12 @@
+import DateTimePicker from '@react-native-community/datetimepicker';
 import { useMutation, useQuery } from '@tanstack/react-query';
-import React, { useState } from 'react';
-import { Alert, StyleSheet, Text, TextInput, TouchableOpacity, View} from 'react-native';
 import { useFormik } from 'formik';
+import React, { useState } from 'react';
+import { StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { useCollectionService } from '../../services/CollectionService';
-import { useSessionStatus } from '../../services/SessionService';
 import { paths } from '../../utils/paths';
 
-const CreateCollection = ({navigation}) => {
+const CreateCollection = ({ navigation }) => {
   const status = useSessionStatus();
   if (status !== 'auth') {
     navigation.navigate(paths.signIn);
@@ -14,8 +14,11 @@ const CreateCollection = ({navigation}) => {
   }
   const collectionService = useCollectionService();
 
+  const [show, setShow] = useState(false);
+  const [date, setDate] = useState(new Date());
   const [step, setStep] = useState(0);
   const [files, setFiles] = useState([]);
+
   const handleFileUpload = (value, isRemoving) => {
     if (isRemoving) {
       setFiles(value);
@@ -33,13 +36,13 @@ const CreateCollection = ({navigation}) => {
 
   const { mutate } = useMutation(collectionService.addCollection);
 
-    const formik = useFormik({
+  const formik = useFormik({
     initialValues: {
       title: '',
       category: '',
       goal: '2000',
       description: '',
-      date: '',
+      date: new Date(),
     },
     onSubmit: (values) => {
       mutate(
@@ -61,55 +64,66 @@ const CreateCollection = ({navigation}) => {
     <View style={styles.container}>
       <View style={styles.createCollectionContainer}>
         <Text style={styles.createCollectionText}>Create your collection</Text>
-            <View style={styles.form}>
-              <Text style={styles.labelText}>Enter title:</Text>
-              <TextInput
-                style={styles.input}
-                placeholder="Title"
-                placeholderTextColor="gray"
-                onChangeText={formik.handleChange('title')}
-                value={formik.values.title}
-              />
-              <Text style={styles.labelText}>Choose category:</Text>
-              <TextInput
-                style={styles.input}
-                placeholder="Category"
-                placeholderTextColor="gray"
-                onChangeText={formik.handleChange('category')}
-                value={formik.values.category}
-              />
-              <Text style={styles.labelText}>Enter your goal:</Text>
-              <TextInput
-                style={styles.input}
-                placeholder="Goal"
-                placeholderTextColor="gray"
-                onChangeText={formik.handleChange('goal')}
-                keyboardType='numeric'
-                value={formik.values.goal}
-              />
-              <Text style={styles.labelText}>Add description:</Text>
-              <TextInput
-                style={styles.input}
-                placeholder="Description"
-                placeholderTextColor="gray"
-                onChangeText={formik.handleChange('description')}
-                value={formik.values.description}
-              />
-              <Text style={styles.labelText}>Choose end date:</Text>
-              <TextInput
-                style={styles.input}
-                placeholder="End Date"
-                placeholderTextColor="gray"
-                onChangeText={formik.handleChange('date')}
-                value={formik.values.date}
-              />
-              <TouchableOpacity onPress={formik.handleSubmit}>
-                <View style={styles.createCollectionButton}>
-                  <Text style={styles.createCollectionButtonText}>Create</Text>
-                </View>
-              </TouchableOpacity>
+        <View style={styles.form}>
+          <Text style={styles.labelText}>Enter title:</Text>
+          <TextInput
+            style={styles.input}
+            placeholder="Title"
+            placeholderTextColor="gray"
+            onChangeText={formik.handleChange('title')}
+            value={formik.values.title}
+          />
+          <Text style={styles.labelText}>Choose category:</Text>
+          <TextInput
+            style={styles.input}
+            placeholder="Category"
+            placeholderTextColor="gray"
+            onChangeText={formik.handleChange('category')}
+            value={formik.values.category}
+          />
+          <Text style={styles.labelText}>Enter your goal:</Text>
+          <TextInput
+            style={styles.input}
+            placeholder="Goal"
+            placeholderTextColor="gray"
+            onChangeText={formik.handleChange('goal')}
+            keyboardType='numeric'
+            value={formik.values.goal}
+          />
+          <Text style={styles.labelText}>Add description:</Text>
+          <TextInput
+            style={styles.input}
+            placeholder="Description"
+            placeholderTextColor="gray"
+            onChangeText={formik.handleChange('description')}
+            value={formik.values.description}
+          />
+          <Text style={styles.labelText}>Choose end date:</Text>
+          <Text
+            style={styles.input}
+            onPress={() => setShow(true)}
+          >{formik.values.date.toLocaleDateString()}</Text>
+          {show && (
+            <DateTimePicker
+              mode='date'
+              value={date}
+              minimumDate={new Date()}
+              onChange={
+                (event, selectedDate) => {
+                  setDate(selectedDate)
+                  formik.setFieldValue('date', selectedDate)
+                  setShow(false)
+                }
+              }
+            />
+          )}
+          <TouchableOpacity onPress={formik.handleSubmit}>
+            <View style={styles.createCollectionButton}>
+              <Text style={styles.createCollectionButtonText}>Create</Text>
             </View>
+          </TouchableOpacity>
         </View>
+      </View>
     </View>
   );
 };
