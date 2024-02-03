@@ -1,6 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
+  FlatList,
   Image,
   SafeAreaView,
   StatusBar,
@@ -11,6 +12,7 @@ import {
   View,
   VirtualizedList
 } from 'react-native';
+import BouncyCheckbox from "react-native-bouncy-checkbox";
 import { } from 'react-native-web';
 import { useDebounce } from '../../hooks/useDebounce';
 import { useCollectionService } from '../../services/CollectionService';
@@ -20,15 +22,41 @@ const Collections = ({ navigation }) => {
   const collectionService = useCollectionService();
   const [search, setSearch] = useState('');
   const [query, setQuery] = useState('');
+  const [filterDate, setFilterData] = useState([]);
+  const [availableFilters, setAvailableFilters] = useState([]);
+  const [filters, setFilter] = useState([])
   const debouncedSetQueryFilter = useDebounce((query) => setQuery(query), 1000);
   const { data, status, isLoading } = useQuery(
     collectionService.collectionListKey({ query }),
     collectionService.collectionList
   );
 
+
+  useEffect(() => {
+    if (data && data.length > 0) {
+      setFilterData(data);
+      setAvailableFilters(data.flatMap((record) => record.categories.map(cat => cat)));
+    }
+  }, [data])
+
   useEffect(() => {
     debouncedSetQueryFilter(search);
   }, [search]);
+
+  useEffect(() => {
+    if (filters.length > 0) {
+      setFilterData(data.filter((record) => record.categories.some((category) => filters.some((filter) => filter === category))))
+    }
+  }, [filters])
+
+  const handleFilterSet = (isChecked, filter) => {
+    if (isChecked) {
+      setFilter(filters.concat([filter]))
+    }
+    else {
+      setFilter(filters.filter((fil) => fil !== filter))
+    }
+  }
 
   const showToast = (message) => {
     ToastAndroid.show(message, ToastAndroid.SHORT);
@@ -105,13 +133,14 @@ const Collections = ({ navigation }) => {
           onChangeText={(text) => setSearch(text)}
           value={search}
         />
+
       </View>
 
       {status === 'loading' ? (
         <Text>Loading...</Text>
-      ) : status === 'error' || !data ? (
+      ) : status === 'error' || !filterDate ? (
         <Text>Error</Text>
-      ) : data.length <= 0 ? (
+      ) : filterDate.length <= 0 ? (
         <View style={{ alignItems: 'center', height: '100%', justifyContent: 'center', width: '100%' }}>
           <View
             style={{
@@ -151,20 +180,29 @@ const Collections = ({ navigation }) => {
         </View>
       ) : (
         <SafeAreaView style={{ justifyContent: 'center' }}>
+          <FlatList
+            data={availableFilters}
+            keyExtractor={(item, index) => index}
+            renderItem={({ item }) => (
+              <BouncyCheckbox onPress={(isChecked) => handleFilterSet(isChecked, item)} text={item} />
+            )
+            }
+          />
           <VirtualizedList
             style={{
               flex: 1
             }}
-            data={data}
+            data={filterDate}
             renderItem={({ item }) => card(item, navigation)}
             keyExtractor={(item) => item.id}
             initialNumToRender={4}
-            getItemCount={(_data) => _data.length}
-            getItem={(_data, index) => _data[index]}
+            getItemCount={(_data) => filterDate.length}
+            getItem={(_data, index) => filterDate[index]}
           />
         </SafeAreaView>
-      )}
-    </View>
+      )
+      }
+    </View >
   );
 };
 

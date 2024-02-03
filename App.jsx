@@ -22,7 +22,7 @@ const App = () => {
           </UserServiceProvider>
         </SessionServiceProvider>
       </QueryClientProvider>
-    </React.Fragment>
+    </React.Fragment >
   );
 };
 

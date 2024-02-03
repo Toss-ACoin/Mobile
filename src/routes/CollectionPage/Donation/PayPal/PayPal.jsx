@@ -1,59 +1,49 @@
-// import React from 'react';
-// import { ToastAndroid } from 'react-native';
-// import { PayPalButton, requestOneTimePayment } from 'react-native-paypal';
+import { useMutation } from '@tanstack/react-query';
+import React from 'react';
+import { Button, Linking } from 'react-native';
+import { useCollectionService } from '../../../../services/CollectionService';
 
-// export const PayPal = ({ value, name, isDisable, collectionId }) => {
-//   const currency = 'PLN';
-//   const amount = value ? value.toString() : '0';
-//   const onSuccess = (confirmation) => {
-//     // Handle success
-//     ToastAndroid.show(
-//       `Whooo u donate ${value}zł to ${name}`,
-//       ToastAndroid.SHORT
-//     );
-//   };
+export const PayPal = ({ value, name, isDisable }) => {
+  const collectionService = useCollectionService();
+  const { mutate } = useMutation(collectionService.donate);
 
-//   const onError = (error) => {
-//     // Handle error
-//     console.error(error);
-//   };
+  const currency = 'PLN';
+  const amount = value ? (Number(value) * 100).toString() : '0';
 
-//   const onCancel = (data) => {
-//     // Handle cancellation
-//     console.log(data);
-//   };
 
-//   const {
-//     nonce,
-//     payerId,
-//     email,
-//     firstName,
-//     lastName,
-//     phone
-//   } = await requestOneTimePayment(
-//     token,
-//     {
-//       amount,
-//       // any PayPal supported currency (see here: https://developer.paypal.com/docs/integration/direct/rest/currency-codes/#paypal-account-payments)
-//       currency: {currency},
-//       // any PayPal supported locale (see here: https://braintree.github.io/braintree_ios/Classes/BTPayPalRequest.html#/c:objc(cs)BTPayPalRequest(py)localeCode)
-//       localeCode: 'pl_PL', 
-//       shippingAddressRequired: false,
-//       userAction: 'commit', // display 'Pay Now' on the PayPal review page
-//       // one of 'authorize', 'sale', 'order'. defaults to 'authorize'. see details here: https://developer.paypal.com/docs/api/payments/v1/#payment-create-request-body
-//       intent: 'authorize', 
-//     }
-//   );
+  const handlePayment = () => {
+    const value = { amount, name };
+    mutate(
+      value,
+      {
+        onError: () => {
+          // Handle error
+        },
+        onSuccess: (url) => {
+          Linking.canOpenURL(url).then(supported => {
+            if (supported) {
+              Linking.openURL(url);
+            } else {
+              console.log("Don't know how to open URI: " + url);
+            }
+          })
 
-//   return (
-//     <PayPalButton
-//       style={{ height: 40, color: 'white', layout: 'horizontal' }}
-//       amount={value ? value.toString() : '0'}
-//       currencyCode={currency}
-//       isDisabled={!value || isDisable}
-//       success={(confirmation) => onSuccess(confirmation)}
-//       error={(error) => onError(error)}
-//       cancel={(data) => onCancel(data)}
-//     />
-//   );
-// };
+          // ToastAndroid.show(
+          //   `Whooo u donate ${value}zł to ${name}`,
+          //   ToastAndroid.SHORT
+          // );
+        },
+      }
+    );
+  }
+
+
+  return (
+    <Button
+      style={{ height: 40, color: 'white', layout: 'horizontal' }}
+      disabled={isDisable}
+      onPress={handlePayment}
+      title='Donate'
+    />
+  );
+};

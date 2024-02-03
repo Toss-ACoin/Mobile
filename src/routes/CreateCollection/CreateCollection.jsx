@@ -4,6 +4,7 @@ import { useFormik } from 'formik';
 import React, { useState } from 'react';
 import { StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { useCollectionService } from '../../services/CollectionService';
+import { useSessionStatus } from '../../services/SessionService';
 import { paths } from '../../utils/paths';
 
 const CreateCollection = ({ navigation }) => {

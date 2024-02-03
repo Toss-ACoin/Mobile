@@ -141,22 +141,59 @@ export const CollectionServiceProvider = ({
           return Promise.resolve();
         },
         donate: async (value) => {
-          const response = await context.value.fetcher(
-            `${urlBase}/transaction`,
+
+          const OAuthTokenResponse = await fetch('https://secure.snd.payu.com/pl/standard/user/oauth/authorize?grant_type=client_credentials&client_id=300746&client_secret=2ee86a66e5d97e3fadc400c9f19b065d',
+            {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+              },
+              body: new URLSearchParams({
+                'grant_type': 'client_credentials',
+                'client_id': '300746!',
+                'client_secret': '2ee86a66e5d97e3fadc400c9f19b065d'
+              }),
+            }
+          )
+
+          if (!OAuthTokenResponse.ok) {
+            throw new Error(OAuthTokenResponse.error);
+          }
+
+          const OAuthTokenResult = await OAuthTokenResponse.json()
+
+          console.log(OAuthTokenResult)
+          const createOrderResponse = await fetch('https://secure.snd.payu.com/api/v2_1/orders',
             {
               method: "POST",
               headers: {
-                accept: "*/*",
-                "Access-Control-Allow-Origin": "*",
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${OAuthTokenResult.access_token}`
               },
-              body: JSON.stringify(value),
-            }
-          );
-          if (!response.ok) {
-            throw new Error("Error");
+              body: JSON.stringify({
+                "customerIp": await getIp(),
+                "merchantPosId": "300746",
+                "description": "Donate",
+                "currencyCode": "PLN",
+                "totalAmount": `${value.amount}`,
+                "products":
+                  [{
+                    "name": `${value.name}`,
+                    "unitPrice": `${value.amount}`,
+                    "quantity": "1"
+                  }]
+              }),
+              redirect: 'manual'
+
+            })
+
+
+          if (!createOrderResponse.ok) {
+
+            throw new Error(createOrderResponse);
           }
 
-          return Promise.resolve();
+          return Promise.resolve(createOrderResponse.url);
         },
         categoryKey: (query) => {
           return query ? ["category", query] : ["category"];
@@ -209,6 +246,20 @@ export const CollectionServiceProvider = ({
       },
     };
   }, [context]);
+
+  const getIp = async () => {
+    const response = await fetch(`https://geolocation-db.com/json/`, {
+      method: "GET",
+      headers: {
+        accept: "*/*",
+      },
+    });
+    const result = await response.json();
+    if (!response.ok) {
+      throw new Error("error");
+    }
+    return Promise.resolve(`${result.IPv4}`);
+  };
 
   return (
     <CollectionServiceContext.Provider value={value}>

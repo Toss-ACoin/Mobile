@@ -1,5 +1,4 @@
 import { useQuery } from '@tanstack/react-query';
-import React from 'react';
 import { SafeAreaView, ScrollView, StatusBar, Text, View } from 'react-native';
 import { Spinner } from 'react-native-elements';
 import { useCollectionService } from '../../services/CollectionService';
@@ -21,14 +20,15 @@ export const CollectionPage = ({ navigation, route }) => {
     collectionService.collection
   );
 
-  if (status === 'loading') {
-    return <Spinner size="large" />;
-  }
-
   if (status === 'error' || !data) {
     // Handle error, navigate to an error page or display an error message
     return <Text>Error</Text>;
   }
+
+  if (status === 'loading') {
+    return <Spinner size="large" />;
+  }
+
   const photoSrc = 'https://i.imgur.com/UYiroysl.jpg';
 
   return (
@@ -42,7 +42,7 @@ export const CollectionPage = ({ navigation, route }) => {
               {`${data.collected_money}zł of ${data.goal}zł`}
             </Text>
             <View style={{ borderRadius: 10, height: 9, backgroundColor: 'red', width: '100%' }} />
-            <Donation collectionId={data.id} name={data.title} />
+            <Donation collectionId={data.id} name={data.title} _id={_id} />
           </View>
         </View>
         <View style={{ flexDirection: 'column', gap: 8 }}>

@@ -43,7 +43,10 @@
       },
       "googleServicesFile": "./google-services.json",
       "useNextNotificationsApi": true,
-      "package": "com.mrdell.tossacoin"
+      "package": "com.mrdell.tossacoin",
+      "permissions": [
+        "com.android.vending.BILLING"
+      ]
     },
     "web": {
       "favicon": "./assets/favicon.png"
