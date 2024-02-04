@@ -117,26 +117,26 @@ export const CollectionServiceProvider = ({
           if (!response.ok) {
             throw new Error("Something went wrong");
           }
-          const result = await response.json();
-          value.image.forEach(async (file) => {
-            const data = new FormData();
-            data.append("image", file, file.name);
-            data.append("id", result.id);
-            const responseFile = await context.value.fetcher(
-              `${urlBase}/uploadImage`,
-              {
-                method: "POST",
-                headers: {
-                  accept: "*/*",
-                  "Access-Control-Allow-Origin": "*",
-                },
-                body: data,
-              }
-            );
-            if (!responseFile.ok) {
-              throw new Error("Error");
-            }
-          });
+          // const result = await response.json();
+          // value.image.forEach(async (file) => {
+          //   const data = new FormData();
+          //   data.append("image", file, file.name);
+          //   data.append("id", result.id);
+          //   const responseFile = await context.value.fetcher(
+          //     `${urlBase}/uploadImage`,
+          //     {
+          //       method: "POST",
+          //       headers: {
+          //         accept: "*/*",
+          //         "Access-Control-Allow-Origin": "*",
+          //       },
+          //       body: data,
+          //     }
+          //   );
+          //   if (!responseFile.ok) {
+          //     throw new Error("Error");
+          //   }
+          // });
 
           return Promise.resolve();
         },

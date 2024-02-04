@@ -5,6 +5,7 @@ import React from 'react';
 import { StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { useAnonService, useSessionStatus } from '../../services/SessionService';
 import { paths } from '../../utils/paths';
+import Constants from 'expo-constants';
 
 const SignUpPage = () => {
   const navigation = useNavigation();
@@ -92,11 +93,12 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#1A202C',
+    paddingTop: Constants.statusBarHeight
   },
   logoContainer: {
     flexDirection: 'row',
     position: 'absolute',
-    top: 35,
+    top: 5,
     left: 8,
   },
   logoText: {

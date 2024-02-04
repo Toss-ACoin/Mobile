@@ -4,7 +4,6 @@ import {
   FlatList,
   Image,
   SafeAreaView,
-  StatusBar,
   Text,
   TextInput,
   ToastAndroid,
@@ -17,6 +16,7 @@ import { } from 'react-native-web';
 import { useDebounce } from '../../hooks/useDebounce';
 import { useCollectionService } from '../../services/CollectionService';
 import { paths } from '../../utils/paths';
+import Constants from 'expo-constants';
 
 const Collections = ({ navigation }) => {
   const collectionService = useCollectionService();
@@ -105,7 +105,7 @@ const Collections = ({ navigation }) => {
 
 
   return (
-    <View style={{ alignItems: 'center', flexDirection: 'column', paddingBottom: 16, paddingTop: StatusBar.currentHeight || 0 }}>
+    <View style={{ alignItems: 'center', flexDirection: 'column', paddingBottom: 16, paddingTop: Constants.statusBarHeight }}>
       <View
         style={{
           alignItems: 'center',
@@ -126,7 +126,7 @@ const Collections = ({ navigation }) => {
             borderWidth: 2,
             fontSize: 18,
             fontWeight: 'semibold',
-            marginTop: 35,
+            marginTop: 5,
             width: '200%',
           }}
           placeholder="Search"
@@ -135,7 +135,6 @@ const Collections = ({ navigation }) => {
         />
 
       </View>
-
       {status === 'loading' ? (
         <Text>Loading...</Text>
       ) : status === 'error' || !filterDate ? (
@@ -184,13 +183,14 @@ const Collections = ({ navigation }) => {
             data={availableFilters}
             keyExtractor={(item, index) => index}
             renderItem={({ item }) => (
-              <BouncyCheckbox onPress={(isChecked) => handleFilterSet(isChecked, item)} text={item} />
+               <BouncyCheckbox style={{marginTop: 10}} onPress={(isChecked) => handleFilterSet(isChecked, item)} text={item} />
             )
             }
           />
           <VirtualizedList
             style={{
-              flex: 1
+              flex: 1,
+              height: '20%'
             }}
             data={filterDate}
             renderItem={({ item }) => card(item, navigation)}

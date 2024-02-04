@@ -14,11 +14,9 @@ const UserCollections = () => {
 
 const styles = StyleSheet.create({
   container: {
-    alignItems: 'center',
-    backgroundColor: 'transparent', // Set background color if needed
+    flex: 1,
     flexDirection: 'row',
-    height: 'calc(100% - 80px)',
-    width: '100%',
+    backgroundColor: 'transparent', // Set background color if needed
   },
 });
 

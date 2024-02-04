@@ -1,13 +1,13 @@
 import { useNavigation } from '@react-navigation/native';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useMutation } from '@tanstack/react-query';
 import React from 'react';
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
-import { Avatar, Button, Divider } from 'react-native-elements';
-import EditIcon from 'react-native-vector-icons/MaterialIcons';
+import { Button, Divider } from 'react-native-elements';
 import LogOutIcon from 'react-native-vector-icons/MaterialIcons'
-import { useSessionStatus } from '../../../services/SessionService';
+import { useSessionStatus, useAuthService } from '../../../services/SessionService';
 import { useUserService } from '../../../services/UserService';
 import { paths } from '../../../utils/paths';
+import Constants from 'expo-constants';
 
 const UserData = () => {
   const sessionStatus = useSessionStatus();
@@ -17,7 +17,14 @@ const UserData = () => {
     return null;
   }
   const userService = useUserService();
+  const sessionService = useAuthService();
   const { data, status } = useQuery(userService.userListKey(), userService.getUserDate);
+
+  const { mutate } = useMutation(sessionService.signOut)
+  const handleLogOut = () => {
+    mutate();
+    navigation.navigate(paths.signIn);
+  }
 
   return (
     <ScrollView style={styles.container}>
@@ -28,16 +35,8 @@ const UserData = () => {
       ) : (
         <>
           <View style={styles.userInfoContainer}>
-            <Avatar size="xlarge" />
             <View style={styles.userInfoText}>
               <Text style={styles.userName}>{data.name}</Text>
-            </View>
-            <View style={styles.editButton}>
-              <Button
-                title="Edit"
-                icon={<EditIcon name="edit" size={20} color="white" />}
-                buttonStyle={{ backgroundColor: 'red' }}
-              />
             </View>
           </View>
           <Divider style={styles.divider} />
@@ -74,6 +73,7 @@ const UserData = () => {
                 title="Log Out"
                 icon={<LogOutIcon name="logout" size={20} color="white" />}
                 buttonStyle={{ backgroundColor: 'red' }}
+                onPress={handleLogOut}
               />
           </View>
         </>
@@ -85,6 +85,7 @@ const UserData = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    paddingTop: Constants.statusBarHeight
   },
   userInfoContainer: {
     flexDirection: 'row',
@@ -101,9 +102,6 @@ const styles = StyleSheet.create({
   },
   userDetails: {
     fontSize: 18,
-  },
-  editButton: {
-    marginLeft: 'auto',
   },
   divider: {
     marginVertical: 10,

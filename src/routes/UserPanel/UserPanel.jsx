@@ -6,6 +6,7 @@ import UserData from './UserData/UserData';
 const UserPanel = () => {
   return (
     <View style={styles.container}>
+      <Sidebar />
       <UserData />
     </View>
   );

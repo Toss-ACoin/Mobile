@@ -1,8 +1,9 @@
 import DateTimePicker from '@react-native-community/datetimepicker';
+import SelectDropdown from 'react-native-select-dropdown'
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { useFormik } from 'formik';
 import React, { useState } from 'react';
-import { StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, Text, TextInput, TouchableOpacity, View, ToastAndroid } from 'react-native';
 import { useCollectionService } from '../../services/CollectionService';
 import { useSessionStatus } from '../../services/SessionService';
 import { paths } from '../../utils/paths';
@@ -37,6 +38,18 @@ const CreateCollection = ({ navigation }) => {
 
   const { mutate } = useMutation(collectionService.addCollection);
 
+  function padTo2Digits(num) {
+    return num.toString().padStart(2, '0');
+  }
+  
+  function formatDate(date) {
+    return [
+      date.getFullYear(),
+      padTo2Digits(date.getMonth() + 1),
+      padTo2Digits(date.getDate()),
+    ].join('-');
+  }
+
   const formik = useFormik({
     initialValues: {
       title: '',
@@ -46,14 +59,21 @@ const CreateCollection = ({ navigation }) => {
       date: new Date(),
     },
     onSubmit: (values) => {
+      let {title, category, goal, description, date} = values
+      date = formatDate(date)
+      const data = {title, category, goal, description, date}
       mutate(
-        values,
+        data,
         {
           onError: () => {
             // Handle error
           },
           onSuccess: () => {
             // Handle success
+            ToastAndroid.show(
+              `Whooo you created collection`,
+              ToastAndroid.SHORT
+            );
             navigation.navigate(paths.collections);
           },
         }
@@ -75,12 +95,18 @@ const CreateCollection = ({ navigation }) => {
             value={formik.values.title}
           />
           <Text style={styles.labelText}>Choose category:</Text>
-          <TextInput
-            style={styles.input}
-            placeholder="Category"
-            placeholderTextColor="gray"
-            onChangeText={formik.handleChange('category')}
-            value={formik.values.category}
+          <SelectDropdown style={styles.dropDown}
+            data={data}
+            onSelect={(selectedItem, index) => {
+                formik.setFieldValue('category', selectedItem, false)
+            }}
+            buttonTextAfterSelection={(selectedItem, index) => {
+                return selectedItem
+            }}
+            rowTextForSelection={(item, index) => {
+                return item
+            }}
+                defaultButtonText="Select category"
           />
           <Text style={styles.labelText}>Enter your goal:</Text>
           <TextInput
@@ -173,5 +199,9 @@ const styles = StyleSheet.create({
     fontSize: 15,
     marginLeft: 5
   },
+  dropDown: {
+    width: '100%',
+    fontSize: 15,
+  }
 });
 export default CreateCollection;

@@ -1,11 +1,13 @@
 import { useQuery } from '@tanstack/react-query';
-import React from 'react';
-import { ScrollView, StyleSheet, Text, View } from 'react-native';
-import { AccordionList } from 'react-native-collapsible'; // You need to install this library
+import React, { useState } from 'react';
+import { ScrollView, StyleSheet, Text, View} from 'react-native';
+import Accordion from 'react-native-collapsible/Accordion';
 import { useUserService } from '../../../services/UserService';
+import Constants from 'expo-constants';
 
 const UserCollectionData = () => {
   const userService = useUserService();
+  const [activeSections, setActiveSections] = useState([]);
   const { data, status } = useQuery(
     userService.userCollectionKey(),
     userService.getUserCollections
@@ -23,31 +25,34 @@ const UserCollectionData = () => {
           <Text>You do not have any collections</Text>
         </View>
       ) : (
-        <AccordionList
-          list={data}
-          headerKey="title"
-          contentKey="description"
-          renderHeader={(item) => (
-            <Text style={styles.collectionTitle}>{item.title}</Text>
-          )}
-          renderContent={(item) => (
-            <View style={styles.collectionDetails}>
+        <Accordion
+            activeSections={activeSections}
+            onChange={setActiveSections}
+            sections={data}
+          renderHeader={(section) => ((
+            <View>
+              <Text style={styles.collectionTitle}>{section.title}</Text>
+            </View>
+          ))}
+          renderContent={(section) => ((
+            <View>
               <Text style={styles.detailLabel}>Description: </Text>
-              <Text style={styles.detailValue}>{item.description}</Text>
+              <Text style={styles.detailValue}>{section.description}</Text>
               <Text style={styles.detailLabel}>Goal: </Text>
-              <Text style={styles.detailValue}>{item.goal}</Text>
+              <Text style={styles.detailValue}>{section.goal}</Text>
               <Text style={styles.detailLabel}>Collected money: </Text>
-              <Text style={styles.detailValue}>{item.collected_money}</Text>
+              <Text style={styles.detailValue}>{section.collected_money}</Text>
               <Text style={styles.detailLabel}>End date: </Text>
-              <Text style={styles.detailValue}>{item.fundraising_end}</Text>
+              <Text style={styles.detailValue}>{section.fundraising_end}</Text>
               <Text style={styles.detailLabel}>Availability: </Text>
               <Text style={styles.detailValue}>
-                {item.available ? 'Available' : 'Unavailable'}
+                {section.available ? 'Available' : 'Unavailable'}
               </Text>
             </View>
-          )}
-        />
-      )}
+          ))}
+          />
+        )
+        }
     </ScrollView>
   );
 };
@@ -56,6 +61,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingHorizontal: 15,
+    paddingTop: Constants.statusBarHeight
   },
   heading: {
     fontSize: 24,

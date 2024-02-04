@@ -2,6 +2,7 @@ import { useNavigation } from '@react-navigation/native';
 import React from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { paths } from '../../../utils/paths';
+import Constants from 'expo-constants';
 
 const Sidebar = () => {
   const navigation = useNavigation();
@@ -39,7 +40,8 @@ const styles = StyleSheet.create({
     marginTop: 2.5,
     paddingVertical: 8,
     textAlign: 'center',
-    width: '25%',
+    width: '30%',
+    paddingTop: Constants.statusBarHeight
   },
   menuContainer: {
     flexDirection: 'column',
@@ -53,7 +55,7 @@ const styles = StyleSheet.create({
   },
   menuItem: {
     color: 'black',
-    fontSize: 18,
+    fontSize: 15,
     fontWeight: 'bold',
     marginBottom: 12,
   },

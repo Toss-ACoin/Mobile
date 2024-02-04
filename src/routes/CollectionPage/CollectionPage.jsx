@@ -5,6 +5,7 @@ import { useCollectionService } from '../../services/CollectionService';
 import { Bubble } from './Bubble/Bubble';
 import { Donation } from './Donation/Donation';
 import { ImgCarousel } from './ImgCarousel/ImgCarousel';
+import Constants from 'expo-constants';
 
 export const CollectionPage = ({ navigation, route }) => {
   const { _id } = route.params;
@@ -32,10 +33,10 @@ export const CollectionPage = ({ navigation, route }) => {
   const photoSrc = 'https://i.imgur.com/UYiroysl.jpg';
 
   return (
-    <SafeAreaView style={{ paddingHorizontal: 40, paddingBottom: 16, paddingTop: StatusBar.currentHeight || 0, flex: 1 }}>
+    <SafeAreaView style={{ paddingHorizontal: 40, paddingBottom: 16, paddingTop: Constants.statusBarHeight, flex: 1 }}>
       <ScrollView >
         <View style={{ flexDirection: 'column', gap: 6, height: "100%" }}>
-          <ImgCarousel imgArray={[photoSrc, photoSrc, photoSrc]} />
+          <ImgCarousel imgArray={[photoSrc, photoSrc, photoSrc]} height={200} />
           <View style={{ flexDirection: 'column', gap: 6, }}>
             <Text style={{ fontSize: 32, fontWeight: 'bold' }}>{data.title}</Text>
             <Text style={{ fontSize: 20, fontWeight: 'bold' }}>
