@@ -10,7 +10,7 @@ const SignIn = ({navigation}) => {
 
   if (status === 'auth') {
     // Use navigation.replace() if you're using StackNavigator
-    navigation.navigate(paths.profile);
+    navigation.popToTop();
     return null;
   }
 

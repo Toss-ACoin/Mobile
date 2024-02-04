@@ -31,7 +31,7 @@ export const CollectionServiceProvider = ({
           if (!query) {
             return undefined;
           }
-          const response = await context.value.fetcher(
+          const response = await fetch(
             `${urlBase}/fundraising?id=${query}`,
             {
               method: "GET",

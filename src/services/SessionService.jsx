@@ -121,11 +121,11 @@ export const SessionServiceProvider = ({ children }) => {
                   )
                 );
                 await AsyncStorage.setItem("authorization", str);
-                await AsyncStorage.setItem("role", result.User.role);
+                await AsyncStorage.setItem("role", result.user_role[0].authority);
               client.setQueryData(getSessionQueryKey(), {
                 status: "auth",
                 authorization: str,
-                role: result.User.role,
+                role: result.user_role[0].authority,
               });
               return Promise.resolve();
             },

@@ -35,7 +35,7 @@ const Collections = ({ navigation }) => {
   useEffect(() => {
     if (data && data.length > 0) {
       setFilterData(data);
-      setAvailableFilters(data.flatMap((record) => record.categories.map(cat => cat)));
+      setAvailableFilters(Array.from(new Set(data.flatMap((record) => record.categories.map(cat => cat)))));
     }
   }, [data])
 
@@ -46,6 +46,9 @@ const Collections = ({ navigation }) => {
   useEffect(() => {
     if (filters.length > 0) {
       setFilterData(data.filter((record) => record.categories.some((category) => filters.some((filter) => filter === category))))
+    }
+    else {
+      setFilterData(data)
     }
   }, [filters])
 
@@ -181,9 +184,12 @@ const Collections = ({ navigation }) => {
         <SafeAreaView style={{ justifyContent: 'center' }}>
           <FlatList
             data={availableFilters}
+            style={{flexGrow: 0, paddingBottom: 10}}
             keyExtractor={(item, index) => index}
             renderItem={({ item }) => (
-               <BouncyCheckbox style={{marginTop: 10}} onPress={(isChecked) => handleFilterSet(isChecked, item)} text={item} />
+               <BouncyCheckbox fillColor='red' 
+               style={{marginTop: 10}} 
+               onPress={(isChecked) => handleFilterSet(isChecked, item)} text={item} />
             )
             }
           />
